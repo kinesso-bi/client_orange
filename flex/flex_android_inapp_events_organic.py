@@ -153,13 +153,21 @@ def insert_row(cursor, row):
 
 data = functions.get_stream(get_url=url, get_params=params, get_app_id=app_id, get_report_type=report_type)
 
-cnx = mysql.connector.connect(
-    user=credentials['user'],
-    password=credentials['password'],
-    host=credentials['host'],
-    database=credentials['database'])
+try:
+    cnx = mysql.connector.connect(
+        user=credentials['user'],
+        password=credentials['password'],
+        host=credentials['host'],
+        database=credentials['database'])
+except mysql.connector.Error as err:
+    functions.error_log(app_id, report_type, err.args[0], err.args[1])
+    quit()
 
-cursor = cnx.cursor()
+try:
+    cursor = cnx.cursor()
+except mysql.connector.Error as err:
+    functions.error_log(app_id, report_type, err.args[0], err.args[1])
+    quit()
 
 for line in reader(data):
     insert_row(cursor=cursor, row=line)
