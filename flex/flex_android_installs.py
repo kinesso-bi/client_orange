@@ -3,48 +3,26 @@ from csv import reader
 from datetime import date, timedelta
 
 import mysql.connector
-import requests
+
+import functions
 
 with open('credentials.json') as file:
     credentials = json.load(file)
 
 app_id = 'com.orange.rn.dop'
 report_type = 'installs_report'
+sfx = '&timezone=Europe%2fWarsaw&additional_fields=install_app_store,contributor1_match_type,contributor2_match_type,contributor3_match_type,match_type,device_category,gp_referrer,gp_click_time,gp_install_begin,amazon_aid,keyword_match_type'
 yesterday = date.today() - timedelta(days=1)
 
 params = {
     'api_token': credentials['api_token'],
     'from': yesterday,
     'to': yesterday,
-    'sfx': ''
+    'sfx': sfx
 }
 
 url = 'https://hq.appsflyer.com/export/{}/{}/v5?api_token={}{}'.format(app_id, report_type, params['api_token'],
                                                                        params['sfx'])
-
-
-def error_log(message, label):
-    with open('errors.txt', 'a+') as file_object:
-        file_object.seek(0)
-        logs = file_object.read(100)
-        if len(logs) > 0:
-            file_object.write('\n')
-            file_object.write('')
-        else:
-            file_object.write('')
-
-def get_stream(get_url, get_params):
-    response = requests.request('GET', url=get_url, params=get_params)
-    if response.status_code != 200:
-        if response.status_code == 400:
-            # TODO error log
-            print("")
-        else:
-            # TODO error log
-            print("")
-    else:
-        stream = response.text
-        return stream.split('\n')[1:-1]
 
 
 def insert_row(cursor, row):
@@ -170,12 +148,11 @@ def insert_row(cursor, row):
                        )
                        )
     except mysql.connector.Error as e:
-        # TODO error log
-        print(e)
+        functions.error_log(app_id, report_type, e.args[0], e.args[1])
         pass
 
 
-data = get_stream(get_url=url, get_params=params)
+data = functions.get_stream(get_url=url, get_params=params, get_app_id=app_id, get_report_type=report_type)
 
 cnx = mysql.connector.connect(
     user=credentials['user'],
@@ -192,6 +169,6 @@ try:
     cnx.commit()
     cursor.close()
     cnx.close()
+    functions.success_log(app_id, report_type, 1, "File uploaded.")
 except mysql.connector.Error as err:
-    # TODO error log
-    print(err)
+    functions.error_log(app_id, report_type, err.args[0], err.args[1])
