@@ -8,7 +8,7 @@ import functions
 
 app_id = 'com.orange.rn.dop'
 report_type = 'installs_report'
-sfx = '&timezone=Europe%2fWarsaw&additional_fields=install_app_store,contributor1_match_type,contributor2_match_type,contributor3_match_type,match_type,device_category,gp_referrer,gp_click_time,gp_install_begin,amazon_aid,keyword_match_type'
+sfx = '&timezone=Europe%2fWarsaw&additional_fields=install_app_store,contributor1_match_type,contributor2_match_type,contributor3_match_type,match_type,device_category,gp_referrer,gp_click_time,gp_install_begin,amazon_aid,keyword_match_type&maximum_rows=1000000'
 yesterday = date.today() - timedelta(days=1)
 
 try:
