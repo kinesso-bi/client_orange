@@ -6,13 +6,17 @@ import mysql.connector
 
 import functions
 
-with open('credentials.json') as file:
-    credentials = json.load(file)
-
 app_id = 'com.orange.rn.dop'
 report_type = 'installs_report'
 sfx = '&timezone=Europe%2fWarsaw&additional_fields=install_app_store,contributor1_match_type,contributor2_match_type,contributor3_match_type,match_type,device_category,gp_referrer,gp_click_time,gp_install_begin,amazon_aid,keyword_match_type'
 yesterday = date.today() - timedelta(days=1)
+
+try:
+    with open('credentials.json') as file:
+        credentials = json.load(file)
+except FileNotFoundError as f:
+    functions.error_log(app_id, report_type, 1, f)
+    quit()
 
 params = {
     'api_token': credentials['api_token'],
@@ -21,8 +25,10 @@ params = {
     'sfx': sfx
 }
 
-url = 'https://hq.appsflyer.com/export/{}/{}/v5?api_token={}{}'.format(app_id, report_type, params['api_token'],
-                                                                       params['sfx'])
+url = 'https://hq.appsflyer.com/export/{app}/{report}/v5?api_token={token}{metrics}'.format(app=app_id,
+                                                                                            report=report_type,
+                                                                                            token=params['api_token'],
+                                                                                            metrics=params['sfx'])
 
 
 def insert_row(cursor, row):
