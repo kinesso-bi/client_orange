@@ -23,6 +23,16 @@ url = 'https://hq.appsflyer.com/export/{}/{}/v5?api_token={}{}'.format(app_id, r
                                                                        params['sfx'])
 
 
+def error_log(message, label):
+    with open('errors.txt', 'a+') as file_object:
+        file_object.seek(0)
+        logs = file_object.read(100)
+        if len(logs) > 0:
+            file_object.write('\n')
+            file_object.write('')
+        else:
+            file_object.write('')
+
 def get_stream(get_url, get_params):
     response = requests.request('GET', url=get_url, params=get_params)
     if response.status_code != 200:
@@ -159,9 +169,9 @@ def insert_row(cursor, row):
                            row[91]
                        )
                        )
-    except mysql.connector.Error as err:
+    except mysql.connector.Error as e:
         # TODO error log
-        print(err)
+        print(e)
         pass
 
 
@@ -178,6 +188,10 @@ cursor = cnx.cursor()
 for line in reader(data):
     insert_row(cursor=cursor, row=line)
 
-cnx.commit(),
-cursor.close()
-cnx.close()
+try:
+    cnx.commit()
+    cursor.close()
+    cnx.close()
+except mysql.connector.Error as err:
+    # TODO error log
+    print(err)
