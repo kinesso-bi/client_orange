@@ -32,14 +32,17 @@ def error_log(get_app_id, get_report_type, error_code, message):
 
 
 def get_stream(get_url, get_params, get_app_id, get_report_type):
+    success_log(get_app_id, get_report_type, 1,"File download started.")
     response = requests.request('GET', url=get_url, params=get_params)
     if response.status_code != 200:
         error_log(get_app_id, get_report_type, response.status_code, response.text)
         return None
     else:
         stream = response.text
-        print("stream: ", len(stream))
-        return stream.split('\n')[1:-1]
+        success_log(get_app_id, get_report_type, 1, "File download finished.")
+        result = stream.split('\n')[1:-1]
+        print("stream: ", len(result))
+        return result
 
 
 def get_token(app_id, report_type):
@@ -76,11 +79,12 @@ def get_cursor(app_id, report_type, cnx):
         return None
 
 
-def db_disconnect(app_id, report_type, cnx, cursor):
+def db_disconnect(app_id, report_type, cnx, cursor, date_target_start, date_target_end, db_target):
     try:
         cnx.commit()
         cursor.close()
         cnx.close()
-        success_log(app_id, report_type, 1, "File uploaded.")
+        success_log(app_id, report_type, 1,
+                    "File uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
     except mysql.connector.Error as err:
         error_log(app_id, report_type, err.args[0], err.args[1])
