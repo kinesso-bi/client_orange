@@ -1,29 +1,25 @@
 import json
 from csv import reader
-from datetime import date, timedelta
+from datetime import date
 
 import mysql.connector
 
 import functions
 
 
-def report():
+def report(date_target_start: date, date_target_end: date):
+    date_start = date_target_start
+    date_end = date_target_end
     app_id = 'com.orange.rn.dop'
     report_type = 'installs_report'
     sfx = '&timezone=Europe%2fWarsaw&additional_fields=install_app_store,contributor1_match_type,contributor2_match_type,contributor3_match_type,match_type,device_category,gp_referrer,gp_click_time,gp_install_begin,amazon_aid,keyword_match_type&maximum_rows=1000000'
-    yesterday = date.today() - timedelta(days=1)
 
-    try:
-        with open('credentials.json') as file:
-            credentials = json.load(file)
-    except FileNotFoundError as f:
-        functions.error_log(app_id, report_type, 1, f)
-        quit()
+    credentials = functions.get_token(app_id, report_type)
 
     params = {
         'api_token': credentials['api_token'],
-        'from': yesterday,
-        'to': yesterday,
+        'from': date_start,
+        'to': date_end,
         'sfx': sfx
     }
 
@@ -160,35 +156,14 @@ def report():
             pass
 
     data = functions.get_stream(get_url=url, get_params=params, get_app_id=app_id, get_report_type=report_type)
-
-    try:
-        cnx = mysql.connector.connect(
-            user=credentials['user'],
-            password=credentials['password'],
-            host=credentials['host'],
-            database=credentials['database'],
-            port=credentials['port'])
-    except mysql.connector.Error as err:
-        functions.error_log(app_id, report_type, err.args[0], err.args[1])
-        quit()
-
-    try:
-        cursor = cnx.cursor()
-    except mysql.connector.Error as err:
-        functions.error_log(app_id, report_type, err.args[0], err.args[1])
-        quit()
-
-    for line in reader(data):
-        insert_row(cursor=cursor, row=line)
-
-    try:
-        cnx.commit()
-        cursor.close()
-        cnx.close()
-        functions.success_log(app_id, report_type, 1, "File uploaded.")
-    except mysql.connector.Error as err:
-        functions.error_log(app_id, report_type, err.args[0], err.args[1])
-
-
-if __name__ == "__main__":
-    report()
+    if data is None:
+        return
+    else:
+        cnx = functions.db_connect(app_id, report_type)
+        cursor = functions.get_cursor(app_id, report_type, cnx)
+        if cursor is None:
+            return
+        else:
+            for line in reader(data):
+                insert_row(cursor=cursor, row=line)
+            functions.db_disconnect(app_id, report_type, cnx, cursor)
