@@ -131,3 +131,4 @@ dmypy.json
 # Secrets
 **/credentials.json
 **/logs.txt
+**/logs.html
