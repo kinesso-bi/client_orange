@@ -1,4 +1,3 @@
-import json
 from csv import reader
 from datetime import date
 
@@ -175,4 +174,5 @@ def report(date_target_start: date, date_target_end: date):
         else:
             for line in reader(data):
                 insert_row(cursor=cursor, row=line)
-            functions.db_disconnect(app_id, report_type, cnx, cursor)
+            functions.db_disconnect(app_id, report_type, cnx, cursor, date_target_start=date_start,
+                                    date_target_end=date_end, db_target="flex_ios_installs_organic.py")
