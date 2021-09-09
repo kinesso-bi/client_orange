@@ -166,7 +166,8 @@ def report():
             user=credentials['user'],
             password=credentials['password'],
             host=credentials['host'],
-            database=credentials['database'])
+            database=credentials['database'],
+            port=credentials['port'])
     except mysql.connector.Error as err:
         functions.error_log(app_id, report_type, err.args[0], err.args[1])
         quit()
@@ -187,3 +188,7 @@ def report():
         functions.success_log(app_id, report_type, 1, "File uploaded.")
     except mysql.connector.Error as err:
         functions.error_log(app_id, report_type, err.args[0], err.args[1])
+
+
+if __name__ == "__main__":
+    report()
