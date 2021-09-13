@@ -16,20 +16,21 @@ import flex_ios_installs_organic
 import flex_ios_uninstalls
 
 yesterday = date.today() - timedelta(days=1)
+print(yesterday)
 
-flex_android_conversion_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_android_installs.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_android_installs_organic.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_android_uninstalls.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_ios_conversion_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_ios_installs.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_ios_installs_organic.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_ios_uninstalls.report(date_target_start=yesterday, date_target_end=yesterday)
-
-flex_android_inapp_events_organic.report(date_target_start=yesterday, date_target_end=yesterday)
-flex_ios_inapp_events_organic.report(date_target_start=yesterday, date_target_end=yesterday)
-
-# flex_android_inapp_events.report(date_target_start=yesterday, date_target_end=yesterday)
-# flex_android_inapp_events_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
-# flex_ios_inapp_events.report(date_target_start=yesterday, date_target_end=yesterday)
-# flex_ios_inapp_events_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_android_conversion_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_android_installs.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_android_installs_organic.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_android_uninstalls.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_ios_conversion_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_ios_installs.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_ios_installs_organic.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_ios_uninstalls.report(date_target_start=yesterday, date_target_end=yesterday)
+# later
+# flex_android_inapp_events_organic.report(date_target_start=yesterday, date_target_end=yesterday)
+# flex_ios_inapp_events_organic.report(date_target_start=yesterday, date_target_end=yesterday)
+# TODO run this up to date
+# flex_android_inapp_events.report(date_target_start='2021-07-22', date_target_end='2021-07-25')
+# flex_android_inapp_events_retargeting.report(date_target_start='2021-07-22', date_target_end='2021-07-25')
+# flex_ios_inapp_events.report(date_target_start='2021-07-22', date_target_end='2021-07-25')
+# flex_ios_inapp_events_retargeting.report(date_target_start='2021-07-22', date_target_end='2021-07-25')
