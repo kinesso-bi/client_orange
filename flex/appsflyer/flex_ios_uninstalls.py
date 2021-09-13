@@ -156,3 +156,4 @@ def report(date_target_start: date, date_target_end: date):
     script_name = os.path.basename(__file__)
     functions.get_data(url=url, params=params, app_id=app_id, report_type=report_type, insert_function=insert_row,
                        date_start=date_start, date_end=date_end, script_name=script_name)
+    #test
