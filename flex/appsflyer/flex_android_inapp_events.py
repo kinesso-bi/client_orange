@@ -1,4 +1,4 @@
-from csv import reader
+import os
 from datetime import date
 
 import mysql.connector
@@ -153,16 +153,6 @@ def report(date_target_start: date, date_target_end: date):
             functions.error_log(app_id, report_type, e.args[0], e.args[1])
             pass
 
-    data = functions.get_stream(get_url=url, get_params=params, get_app_id=app_id, get_report_type=report_type)
-    if data is None:
-        return
-    else:
-        cnx = functions.db_connect(app_id, report_type)
-        cursor = functions.get_cursor(app_id, report_type, cnx)
-        if cursor is None:
-            return
-        else:
-            for line in reader(data):
-                insert_row(cursor=cursor, row=line)
-            functions.db_disconnect(app_id, report_type, cnx, cursor, date_target_start=date_start,
-                                    date_target_end=date_end, db_target="flex_android_inapp_events.py")
+    script_name = os.path.basename(__file__)
+    functions.get_data(url=url, params=params, app_id=app_id, report_type=report_type, insert_function=insert_row,
+                       date_start=date_start, date_end=date_end, script_name=script_name)
