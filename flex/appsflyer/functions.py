@@ -1,4 +1,5 @@
 import json
+from csv import reader
 from datetime import datetime
 
 import mysql.connector
@@ -32,7 +33,7 @@ def error_log(get_app_id, get_report_type, error_code, message):
 
 
 def get_stream(get_url, get_params, get_app_id, get_report_type):
-    success_log(get_app_id, get_report_type, 1,"File downloading started.")
+    success_log(get_app_id, get_report_type, 1, "File downloading started.")
     response = requests.request('GET', url=get_url, params=get_params)
     if response.status_code != 200:
         error_log(get_app_id, get_report_type, response.status_code, response.text)
@@ -44,6 +45,15 @@ def get_stream(get_url, get_params, get_app_id, get_report_type):
         print("stream: ", filesize)
         success_log(get_app_id, get_report_type, 1, "File downloading finished. Rows: {}".format(filesize))
         return result
+
+
+def loadbar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='#'):
+    percent = ('{0:.' + str(decimals) + 'f}').format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{datetime.now().strftime("%H:%M:%S")} - {prefix} |{bar}| {percent}% {suffix}', end='\r')
+    if iteration == total:
+        print()
 
 
 def get_token(app_id, report_type):
@@ -89,3 +99,21 @@ def db_disconnect(app_id, report_type, cnx, cursor, date_target_start, date_targ
                     "File uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
     except mysql.connector.Error as err:
         error_log(app_id, report_type, err.args[0], err.args[1])
+
+
+def get_data(url, params, app_id, report_type, insert_function, date_start, date_end, script_name):
+    data = get_stream(get_url=url, get_params=params, get_app_id=app_id, get_report_type=report_type)
+    if data is None:
+        return
+    else:
+        cnx = db_connect(app_id, report_type)
+        cursor = get_cursor(app_id, report_type, cnx)
+        if cursor is None:
+            return
+        else:
+            data_rows = len(data)
+            for i, line in enumerate(reader(data)):
+                insert_function(cursor, line)
+                loadbar(i + 1, total=data_rows, prefix='Progress:', suffix='Complete', length=20)
+            db_disconnect(app_id, report_type, cnx, cursor, date_target_start=date_start,
+                          date_target_end=date_end, db_target=script_name)
