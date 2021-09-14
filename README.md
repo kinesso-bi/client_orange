@@ -1,6 +1,17 @@
 # client_orange
 
-Directory contains subfolders with ETL scripts corresponding to automation pipelines for Orange data.
+ETL scripts for data warehouse.
 
-# description
+# Description
 
+Directory contains subfolders with scripts for automation pipelines.
+
+# Authors
+
+**Tomasz Pionka**
+- [Profile](https://github.com/tomaszpionka "Tomasz Pionka")
+- [Email](mailto:tomasz.pionka@protonmail.com?subject=Kinesso "Hi!")
+
+# Acknowledgments
+
+* [python-bigquery](https://github.com/googleapis/python-bigquery)
