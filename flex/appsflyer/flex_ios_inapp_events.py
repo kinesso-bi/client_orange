@@ -151,7 +151,7 @@ def report(date_target_start: date, date_target_end: date):
                            )
         except mysql.connector.Error as e:
             functions.error_log(app_id, report_type, e.args[0], e.args[1])
-            pass
+            return
 
     script_name = os.path.basename(__file__)
     functions.get_data(url=url, params=params, app_id=app_id, report_type=report_type, insert_function=insert_row,
