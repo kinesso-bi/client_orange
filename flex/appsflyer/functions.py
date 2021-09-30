@@ -33,7 +33,7 @@ def error_log(get_app_id, get_report_type, error_code, message):
 
 
 def get_stream(get_url, get_params, get_app_id, get_report_type):
-    success_log(get_app_id, get_report_type, 1, "File downloading started.")
+    # success_log(get_app_id, get_report_type, 1, "File downloading started.")
     response = requests.request('GET', url=get_url, params=get_params)
     if response.status_code != 200:
         error_log(get_app_id, get_report_type, response.status_code, response.text)
