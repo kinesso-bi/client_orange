@@ -133,3 +133,5 @@ dmypy.json
 **/service_account.json
 **/logs.txt
 **/logs.html
+**/*.sh
+*.sh
