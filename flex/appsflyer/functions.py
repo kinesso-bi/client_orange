@@ -1,4 +1,5 @@
 import json
+import os
 from csv import reader
 from datetime import datetime
 
@@ -7,7 +8,8 @@ import requests
 
 
 def success_log(get_app_id, get_report_type, code, message):
-    with open('logs.txt', 'a+') as file_object:
+    path = os.path.dirname(os.path.realpath(__file__))
+    with open('{}/logs.txt'.format(path), 'a+') as file_object:
         log = '{}, {}, {}, {}, {}'.format(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), get_app_id, get_report_type,
                                           code, message)
         file_object.seek(0)
@@ -20,7 +22,8 @@ def success_log(get_app_id, get_report_type, code, message):
 
 
 def error_log(get_app_id, get_report_type, error_code, message):
-    with open('logs.txt', 'a+') as file_object:
+    path = os.path.dirname(os.path.realpath(__file__))
+    with open('{}/errors.txt'.format(path), 'a+') as file_object:
         log = '{}, {}, {}, {}, {}'.format(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), get_app_id, get_report_type,
                                           error_code, message)
         file_object.seek(0)
