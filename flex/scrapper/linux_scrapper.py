@@ -17,10 +17,13 @@ def get_credentials():
 
 
 path = os.path.dirname(os.path.realpath(__file__))
-download_path = "{}/".format(path)
+download_path = 'r"{}/"'.format(path)
 username = get_credentials()['username']
 password = get_credentials()['password']
-p = {"download.default_directory": download_path, "download.prompt_for_download": False}
+p = {"profile.default_content_settings.popups": 0,
+     "download.default_directory": download_path,
+     "download.prompt_for_download": False,
+     "directory_upgrade": True}
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("prefs", p)
