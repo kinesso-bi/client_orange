@@ -17,6 +17,8 @@ def get_credentials():
 
 
 path = os.path.dirname(os.path.realpath(__file__))
+print(path
+      )
 username = get_credentials()['username']
 password = get_credentials()['password']
 p = {"download.default_directory": path, "safebrowsing.enabled": "false"}
@@ -45,7 +47,7 @@ def daterange(start_date, end_date):
 start_date = date(2021, 9, 1)
 end_date = date(2021, 9, 30)
 for single_date in daterange(start_date, end_date):
-    sleep(5)
+    sleep(2)
     current_date = single_date.strftime("%Y-%m-%d")
     link = 'https://hq1.appsflyer.com/custom-dashboard#end={END}&grouping=attribution&pageId=89652&start={START}'.format(
         END=current_date, START=current_date)
@@ -57,7 +59,7 @@ for single_date in daterange(start_date, end_date):
     driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[5]/div/div/div[1]/div/div/ul/li[4]').click()
     sleep(7)
     Initial_path = path
-    filename = max([Initial_path + "\\" + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
+    filename = max([Initial_path + "/" + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
     shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
     df = pd.read_csv("data.csv")
     print(df.info())
