@@ -18,6 +18,7 @@ def get_credentials():
 
 path = os.path.dirname(os.path.realpath(__file__))
 download_path = r"{}/".format(path)
+print(download_path)
 username = get_credentials()['username']
 password = get_credentials()['password']
 p = {"profile.default_content_settings.popups": 0,
@@ -26,10 +27,16 @@ p = {"profile.default_content_settings.popups": 0,
      "directory_upgrade": True}
 
 chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
 chrome_options.add_experimental_option("prefs", p)
 chrome_options.add_argument('--headless')
 driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options,
                           service_args=['--verbose', '--log-path=/home/kinesso/automation/chromedriver.log'])
+
+driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+params = {'cmd': 'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_path}}
+command_result = driver.execute("send_command", params)
 
 url = 'https://hq1.appsflyer.com/auth/login'
 driver.get(url)
@@ -59,7 +66,7 @@ for single_date in daterange(start_date, end_date):
     driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[5]/div/div/div[1]/div/div/button').click()
     sleep(2)
     driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[5]/div/div/div[1]/div/div/ul/li[4]').click()
-    sleep(7)
+    sleep(20)
     Initial_path = download_path
     filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
     shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
