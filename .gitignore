@@ -132,6 +132,7 @@ dmypy.json
 **/credentials.json
 **/service_account.json
 **/logs.txt
+**/errors.txt
 **/logs.html
 **/*.sh
 *.sh
