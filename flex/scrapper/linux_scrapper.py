@@ -17,16 +17,15 @@ def get_credentials():
 
 
 path = os.path.dirname(os.path.realpath(__file__))
-print(path
-      )
+print(path)
 username = get_credentials()['username']
 password = get_credentials()['password']
-p = {"download.default_directory": path," download.prompt_for_download": False, "safebrowsing.enabled": "false"}
+p = {"download.default_directory": "{}/".format(path), "download.prompt_for_download": False, "safebrowsing.enabled": "false"}
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("prefs", p)
 chrome_options.add_argument('--headless')
-driver = webdriver.Chrome('/home/kinesso/automation/chromedriver', options=chrome_options,
+driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options,
                           service_args=['--verbose', '--log-path=/home/kinesso/automation/chromedriver.log'])
 
 url = 'https://hq1.appsflyer.com/auth/login'
