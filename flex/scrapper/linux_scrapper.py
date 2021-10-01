@@ -21,7 +21,7 @@ print(path
       )
 username = get_credentials()['username']
 password = get_credentials()['password']
-p = {"download.default_directory": path, "safebrowsing.enabled": "false"}
+p = {"download.default_directory": path," download.prompt_for_download": False, "safebrowsing.enabled": "false"}
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("prefs", p)
