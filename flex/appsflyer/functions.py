@@ -108,7 +108,7 @@ def db_quit(app_id, report_type, cnx, cursor, date_target_start, date_target_end
     try:
         cursor.close()
         cnx.close()
-        success_log(app_id, report_type, 1,
+        error_log(app_id, report_type, 1,
                     "Error - file not uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
     except mysql.connector.Error as err:
         error_log(app_id, report_type, err.args[0], err.args[1])
@@ -124,20 +124,18 @@ def get_data(url, params, app_id, report_type, insert_function, date_start, date
         if cursor is None:
             return
         else:
-            data_rows = len(data)
+            # data_rows = len(data)
             try:
                 for i, line in enumerate(reader(data)):
                     if cnx.is_connected():
                         insert_function(cursor, line)
-                        loadbar(i + 1, total=data_rows, prefix='Progress:', suffix='Complete', length=20)
+                        # loadbar(i + 1, total=data_rows, prefix='Progress:', suffix='Complete', length=20)
                     else:
                         # TODO send error as a message
-                        print(i, "error")
                         db_quit(app_id, report_type, cnx, cursor, date_start, date_end, script_name)
                         break
             except Exception as e:
                 # TODO send error as a message
-                print(e, "error")
                 error_log(app_id, report_type, -1, e)
                 db_quit(app_id, report_type, cnx, cursor, date_start, date_end, script_name)
 
