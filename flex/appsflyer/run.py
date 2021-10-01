@@ -17,7 +17,7 @@ import flex_ios_uninstalls
 
 yesterday = date.today() - timedelta(days=1)
 print(yesterday)
-
+functions.error_log(1,1,1,1)
 # flex_android_conversion_retargeting.report(date_target_start=yesterday, date_target_end=yesterday)
 # flex_android_installs.report(date_target_start=yesterday, date_target_end=yesterday)
 # flex_android_installs_organic.report(date_target_start=yesterday, date_target_end=yesterday)
