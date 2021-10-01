@@ -17,10 +17,10 @@ def get_credentials():
 
 
 path = os.path.dirname(os.path.realpath(__file__))
-print(path)
+download_path = "{}/".format(path)
 username = get_credentials()['username']
 password = get_credentials()['password']
-p = {"download.default_directory": "{}/".format(path), "download.prompt_for_download": False, "safebrowsing.enabled": "false"}
+p = {"download.default_directory": download_path, "download.prompt_for_download": False}
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("prefs", p)
@@ -57,8 +57,8 @@ for single_date in daterange(start_date, end_date):
     sleep(2)
     driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[5]/div/div/div[1]/div/div/ul/li[4]').click()
     sleep(7)
-    Initial_path = path
-    filename = max([Initial_path + "/" + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
+    Initial_path = download_path
+    filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
     shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
     df = pd.read_csv("data.csv")
     print(df.info())
