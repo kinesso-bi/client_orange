@@ -60,8 +60,9 @@ def loadbar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill
 
 
 def get_token(app_id, report_type):
+    path = os.path.dirname(os.path.realpath(__file__))
     try:
-        with open('credentials.json') as file:
+        with open('{}/credentials.json'.format(path)) as file:
             credentials = json.load(file)
         return credentials
     except FileNotFoundError as f:
