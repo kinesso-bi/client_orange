@@ -17,7 +17,7 @@ def get_credentials():
 
 
 path = os.path.dirname(os.path.realpath(__file__))
-download_path = 'r"{}/"'.format(path)
+download_path = r"{}/".format(path)
 username = get_credentials()['username']
 password = get_credentials()['password']
 p = {"profile.default_content_settings.popups": 0,
