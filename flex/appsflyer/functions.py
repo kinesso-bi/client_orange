@@ -1,8 +1,9 @@
 import json
 import os
+import smtplib
 from csv import reader
 from datetime import datetime
-import smtplib
+
 import mysql.connector
 import requests
 
@@ -61,20 +62,12 @@ def send_mail_log(recipients):
     to = recipients
     subject = 'Flex - MySQL upload notification'
     body = lines
-
-    email_text = """\
-    From: %s
-    To: %s
-    Subject: %s
-
-    %s
-    """ % (sent_from, ", ".join(to), subject, body)
-
+    message = 'Subject: {}\n\nLogs:\n{}'.format(subject, body)
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
         server.login(gmail_user, gmail_password)
-        server.sendmail(sent_from, to, email_text)
+        server.sendmail(sent_from, to, message)
         server.close()
         print('Email sent!')
     except:
@@ -153,7 +146,7 @@ def db_disconnect(app_id, report_type, cnx, cursor, date_target_start, date_targ
         success_log(app_id, report_type, 1,
                     "File uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
         mail_log(app_id, report_type, 1,
-                    "File uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
+                 "File uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
     except mysql.connector.Error as err:
         error_log(app_id, report_type, err.args[0], err.args[1])
         mail_log(app_id, report_type, err.args[0], err.args[1])
@@ -164,9 +157,9 @@ def db_quit(app_id, report_type, cnx, cursor, date_target_start, date_target_end
         cursor.close()
         cnx.close()
         error_log(app_id, report_type, 1,
-                    "Error - file not uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
+                  "Error - file not uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
         mail_log(app_id, report_type, 1,
-                    "Error - file not uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
+                 "Error - file not uploaded: {} {} {}".format(db_target, date_target_start, date_target_end))
     except mysql.connector.Error as err:
         error_log(app_id, report_type, err.args[0], err.args[1])
         mail_log(app_id, report_type, err.args[0], err.args[1])
