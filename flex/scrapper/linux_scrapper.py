@@ -73,6 +73,7 @@ for single_date in daterange(start_date, end_date):
     df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
                'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
     # functions.upload_data("orange", "custom_wp_flex_per_ad", df)
+    print(df)
     print(df.info())
     """ ios data """
     driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[6]/div/div/div[1]/div/div/button').click()
@@ -88,6 +89,7 @@ for single_date in daterange(start_date, end_date):
     df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
                'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
     # functions.upload_data("orange", "custom_wp_flex_per_ad", df)
+    print(df)
     print(df.info())
     driver.back()
 
