@@ -1,19 +1,16 @@
-import json
+import os
 import os
 import shutil
 from datetime import date, timedelta
 from time import sleep
-import functions
+
 import pandas as pd
 from selenium import webdriver
 
-
-
-
+import functions
 
 path = os.path.dirname(os.path.realpath(__file__))
 download_path = r"{}/".format(path)
-print(download_path)
 username = functions.get_credentials()['username']
 password = functions.get_credentials()['password']
 p = {"profile.default_content_settings.popups": 0,
@@ -73,9 +70,7 @@ for single_date in daterange(start_date, end_date):
     df['Origin'] = 'WP_Flex'
     df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
                'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
-    # functions.upload_data("orange", "custom_wp_flex_per_ad", df)
-    print(df)
-    print(df.info())
+    functions.upload_data("orange", "custom_wp_flex_per_ad", df)
     """ ios data """
     driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[6]/div/div/div[1]/div/div/button').click()
     sleep(2)
@@ -89,10 +84,7 @@ for single_date in daterange(start_date, end_date):
     df['Origin'] = 'WP_Flex'
     df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
                'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
-    # functions.upload_data("orange", "custom_wp_flex_per_ad", df)
-    print(df)
-    print(df.info())
+    functions.upload_data("orange", "custom_wp_flex_per_ad", df)
     driver.back()
-
 
 driver.close()
