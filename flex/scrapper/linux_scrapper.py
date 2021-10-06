@@ -51,6 +51,7 @@ end_date = date.today()
 
 for single_date in daterange(start_date, end_date):
     Initial_path = download_path
+    csv_path = "{}/data.csv".format(Initial_path)
     sleep(2)
     current_date = single_date.strftime("%Y-%m-%d")
     link = 'https://hq1.appsflyer.com/custom-dashboard#end={END}&grouping=attribution&pageId=89652&start={START}'.format(
@@ -66,7 +67,7 @@ for single_date in daterange(start_date, end_date):
     sleep(20)
     filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
     shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
-    df = pd.read_csv("data.csv")
+    df = pd.read_csv()
     df['Date'] = current_date
     df['Platform'] = 'Android'
     df['Origin'] = 'WP_Flex'
@@ -82,7 +83,7 @@ for single_date in daterange(start_date, end_date):
     sleep(20)
     filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
     shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
-    df = pd.read_csv("data.csv")
+    df = pd.read_csv(csv_path)
     df['Date'] = current_date
     df['Platform'] = 'iOS'
     df['Origin'] = 'WP_Flex'
