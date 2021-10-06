@@ -1,5 +1,4 @@
 import os
-import os
 import shutil
 from datetime import date, timedelta
 from time import sleep
