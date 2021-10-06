@@ -67,7 +67,7 @@ for single_date in daterange(start_date, end_date):
     sleep(20)
     filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
     shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
-    df = pd.read_csv()
+    df = pd.read_csv(csv_path)
     df['Date'] = current_date
     df['Platform'] = 'Android'
     df['Origin'] = 'WP_Flex'
