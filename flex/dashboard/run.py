@@ -6,9 +6,9 @@ now = datetime.now()
 date_end = now - timedelta(days=now.weekday() + 1)
 # date_start = date_end - timedelta(days=6)
 # date_start = date_start.strftime("%Y-%m-%d")
-date_start = "2021-01-01"
+date_start = "2021-02-01"
 date_end = date_end.strftime("%Y-%m-%d")
-date_end = '2021-01-31'
+date_end = '2021-03-31'
 print(date_start, date_end)
 
 # TODO functions launcher orchestrator
