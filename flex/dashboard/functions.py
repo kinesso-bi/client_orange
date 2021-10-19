@@ -116,7 +116,7 @@ def get_cursor(app_id, report_type, cnx):
 
 def db_disconnect(app_id, report_type, cnx, cursor, date_target_start, date_target_end, db_target):
     try:
-        cursor.close()
+        # cursor.close()
         cnx.close()
         success_log(app_id, report_type, 1,
                     "Success: {} {} {}".format(db_target, date_target_start, date_target_end))
@@ -144,4 +144,5 @@ def migrate_data(app_id, report_type, select_function, dataset_target, table_tar
         success_log(app_id, report_type, 1, "Query finished")
         print(df)
         # TODO logging and upload process
-        # upload_data(dataset_name=dataset_target, table_name=table_target, input_data=df)
+        upload_data(dataset_name=dataset_target, table_name=table_target, input_data=df)
+        db_disconnect(app_id, report_type, cnx, "", date_start, date_end, table_target)

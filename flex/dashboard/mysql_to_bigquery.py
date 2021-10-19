@@ -11,16 +11,16 @@ def report(date_target_start: date, date_target_end: date, mysql_app_id, mysql_t
     source_table = mysql_table
     target_dataset = bq_dataset
     target_table = bq_table
+    query = "SELECT * FROM {} WHERE `Date` BETWEEN CAST('{}' AS DATE) AND CAST('{}' AS DATE);".format(
+        source_table,
+        date_start,
+        date_end)
 
-    def select_query():
+    def select_query(query_var=query):
         try:
-            query = "SELECT * FROM {} WHERE `Date` BETWEEN CAST('{}' AS DATE) AND CAST('{}' AS DATE);".format(
-                source_table,
-                date_start,
-                date_end)
             # query = "SELECT Distinct `Date` FROM bigquery_flex_events_daydiff_2021 ORDER BY `Date` DESC LIMIT 90;"
             functions.success_log(app_id, source_table, 1, "Query started")
-            return query
+            return query_var
         except Exception as e:
             functions.error_log(app_id, source_table, -1, e)
             return None
