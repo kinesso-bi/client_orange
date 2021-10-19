@@ -1,15 +1,15 @@
 import json
 from datetime import datetime
-
+import os
 import mysql.connector
 import pandas as pd
 from google.api_core.exceptions import BadRequest, Conflict, NotFound
 from google.cloud import bigquery
 from google.oauth2 import service_account
-
+path = os.path.dirname(os.path.realpath(__file__))
 
 def success_log(get_app_id, get_report_type, code, message):
-    with open('logs.txt', 'a+') as file_object:
+    with open('{}/logs.txt'.format(path), 'a+') as file_object:
         log = '{}, {}, {}, {}, {}'.format(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), get_app_id, get_report_type,
                                           code, message)
         file_object.seek(0)
@@ -22,7 +22,7 @@ def success_log(get_app_id, get_report_type, code, message):
 
 
 def error_log(get_app_id, get_report_type, error_code, message):
-    with open('logs.txt', 'a+') as file_object:
+    with open('{}/logs.txt'.format(path), 'a+') as file_object:
         log = '{}, {}, {}, {}, {}'.format(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), get_app_id, get_report_type,
                                           error_code, message)
         file_object.seek(0)
@@ -36,7 +36,7 @@ def error_log(get_app_id, get_report_type, error_code, message):
 
 def create_client():
     # TODO(developer): Set key_path to the path to the service account key file.
-    key_path = "service_account.json"
+    key_path = "{}/service_account.json".format(path)
     credentials = service_account.Credentials.from_service_account_file(
         key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
@@ -82,7 +82,7 @@ def loadbar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill
 
 def get_token(app_id, report_type):
     try:
-        with open('credentials.json') as file:
+        with open('{}/credentials.json'.format(path)) as file:
             credentials = json.load(file)
         return credentials
     except FileNotFoundError as f:
