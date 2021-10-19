@@ -8,6 +8,7 @@ date_end = now - timedelta(days=now.weekday() + 1)
 # date_start = date_start.strftime("%Y-%m-%d")
 date_start = "2021-01-01"
 date_end = date_end.strftime("%Y-%m-%d")
+date_end = '2021-01-31'
 print(date_start, date_end)
 
 # TODO functions launcher orchestrator
@@ -18,9 +19,9 @@ bq_dataset = 'orange'
 # report_type = 'bigquery_flex_installs_2021'
 # mysql_to_bigquery.report(date_start, date_end, app_id, report_type, bq_dataset, bq_table)
 
-bq_table = 'Events_Daysdiff_by_City'
-report_type = 'bigquery_flex_events_2021'
-mysql_to_bigquery.report(date_start, date_end, app_id, report_type, bq_dataset, bq_table)
+# bq_table = 'Events_Daysdiff_by_City'
+# report_type = 'bigquery_flex_events_2021'
+# mysql_to_bigquery.report(date_start, date_end, app_id, report_type, bq_dataset, bq_table)
 
 bq_table = 'Flex_Events'
 report_type = 'bigquery_flex_events_daydiff_2021'
