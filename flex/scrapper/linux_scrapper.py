@@ -1,9 +1,7 @@
 import os
-import shutil
 from datetime import date, timedelta
 from time import sleep
 
-import pandas as pd
 from selenium import webdriver
 
 import functions
@@ -35,55 +33,29 @@ driver.find_element_by_name('username').send_keys(username)
 driver.find_element_by_name('password').send_keys(password)
 driver.find_element_by_css_selector('.submit-btn').click()
 sleep(5)
-
-
-def daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days)):
-        yield start_date + timedelta(n)
-
+functions.suspension(driver)
 
 start_date = date.today() - timedelta(days=1)
 end_date = date.today()
+target = 5
 
-for single_date in daterange(start_date, end_date):
-    Initial_path = download_path
-    csv_path = "{}/data.csv".format(Initial_path)
-    sleep(2)
-    current_date = single_date.strftime("%Y-%m-%d")
-    link = 'https://hq1.appsflyer.com/custom-dashboard#end={END}&grouping=attribution&pageId=89652&start={START}'.format(
-        END=current_date, START=current_date)
-    driver.get(link)
-    sleep(5)
-    driver.refresh()
+try:
+    for single_date in functions.daterange(start_date, end_date):
+        sleep(2)
+        link = 'https://hq1.appsflyer.com/custom-dashboard#end={END}&grouping=attribution&pageId=89652&start={START}'.format(
+            END=single_date, START=single_date)
+        driver.get(link)
+        functions.suspension(driver)
+        sleep(5)
+        for element in range(target, target + 2):
+            print(element, target + 1)
+            functions.custom_dashboard(driver, path, single_date, element)
+        driver.back()
+
+except Exception as e:
+    print(e)
+
+finally:
+    driver.close()
     sleep(10)
-    """ android data """
-    driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[5]/div/div/div[1]/div/div/button').click()
-    sleep(2)
-    driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[5]/div/div/div[1]/div/div/ul/li[4]').click()
-    sleep(20)
-    filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
-    shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
-    df = pd.read_csv(csv_path)
-    df['Date'] = current_date
-    df['Platform'] = 'Android'
-    df['Origin'] = 'WP_Flex'
-    df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
-               'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
-    functions.upload_data("orange", "custom_wp_flex_per_ad", df)
-    """ ios data """
-    driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[6]/div/div/div[1]/div/div/button').click()
-    sleep(2)
-    driver.find_element_by_xpath('//*[@id="export-wrapper"]/div[2]/div[6]/div/div/div[1]/div/div/ul/li[4]').click()
-    sleep(20)
-    filename = max([Initial_path + f for f in os.listdir(Initial_path) if ".csv" in f], key=os.path.getctime)
-    shutil.move(filename, os.path.join(Initial_path, r"data.csv"))
-    df = pd.read_csv(csv_path)
-    df['Date'] = current_date
-    df['Platform'] = 'iOS'
-    df['Origin'] = 'WP_Flex'
-    df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
-               'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
-    functions.upload_data("orange", "custom_wp_flex_per_ad", df)
-    driver.back()
-
-driver.close()
+    driver.quit()
