@@ -1,10 +1,14 @@
+import datetime
 import json
 import os
+import shutil
 import smtplib
+from time import sleep
+from datetime import timedelta
+import pandas as pd
 from google.api_core.exceptions import BadRequest, Conflict, NotFound
 from google.cloud import bigquery
 from google.oauth2 import service_account
-import datetime
 
 
 def create_client():
@@ -103,3 +107,41 @@ def send_mail_log(recipients):
         print('Email sent!')
     except:
         print('Something went wrong...')
+
+
+def suspension(driver):
+    sleep(10)
+    try:
+        driver.find_element_by_class_name('account-status-modal-inner.pending-suspension')
+        driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[2]/div[2]/div/button').click()
+        print("hello")
+        exit()
+    except:
+        print("not found")
+        pass
+
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + timedelta(n)
+
+
+def custom_dashboard(driver, path, target_date, element):
+    driver.find_element_by_xpath(
+        '//*[@id="export-wrapper"]/div[2]/div[{ELEMENT}]/div/div/div[1]/div/div/button'.format(ELEMENT=element)).click()
+    sleep(1)
+    driver.find_element_by_xpath(
+        '//*[@id="export-wrapper"]/div[2]/div[{ELEMENT}]/div/div/div[1]/div/div/ul/li[4]'.format(
+            ELEMENT=element)).click()
+    sleep(5)
+    filename = max([path + "/" + f for f in os.listdir(path) if ".csv" in f], key=os.path.getctime)
+    shutil.move(filename, os.path.join(path, r"data.csv"))
+    df = pd.read_csv("{}/data.csv".format(path))
+    df['Date'] = target_date
+    df['Platform'] = driver.find_element_by_xpath(
+        '//*[@id="export-wrapper"]/div[2]/div[{ELEMENT}]/div/div/h3/div'.format(ELEMENT=element)).text.split(' ', 1)[0]
+    df['Origin'] = driver.find_element_by_xpath(
+        '//*[@id="custom-dashboard"]/div[2]/div[1]/div/div/div[1]/div/div[2]/div/div/div/div/span/div/div/div[2]/div/span/span/span').text
+    df.rename({'tapregister (Event Counter)': 'tapregister__Event_Counter_',
+               'tapactivate (Event Counter)': 'tapactivate__Event_Counter_'}, axis=1, inplace=True)
+    upload_data("orange", "custom_wp_flex_per_ad", df)
