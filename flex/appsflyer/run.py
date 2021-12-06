@@ -14,7 +14,7 @@ import flex_ios_inapp_events_retargeting
 import flex_ios_installs
 import flex_ios_installs_organic
 import flex_ios_uninstalls
-# import functions
+import functions
 
 yesterday = date.today() - timedelta(days=1)
 print(yesterday)
@@ -35,4 +35,4 @@ flex_ios_inapp_events_organic.report(date_target_start=yesterday, date_target_en
 flex_android_inapp_events.report(date_target_start=yesterday, date_target_end=yesterday)
 flex_ios_inapp_events.report(date_target_start=yesterday, date_target_end=yesterday)
 
-# functions.send_mail_log(recipients=['reports.poland@kinesso.com'])
+functions.send_mail_log(recipients=['reports.poland@kinesso.com'])
