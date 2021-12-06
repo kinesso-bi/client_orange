@@ -76,7 +76,7 @@ def send_mail_log(recipients):
 
 def get_stream(get_url, get_params, get_app_id, get_report_type):
     # success_log(get_app_id, get_report_type, 1, "File downloading started.")
-    response = requests.request('GET', url=get_url, params=get_params)
+    response = requests.request('GET', url=get_url)
     if response.status_code != 200:
         error_log(get_app_id, get_report_type, response.status_code, response.text)
         mail_log(get_app_id, get_report_type, response.status_code, response.text)
@@ -193,3 +193,5 @@ def get_data(url, params, app_id, report_type, insert_function, date_start, date
 
             db_disconnect(app_id, report_type, cnx, cursor, date_target_start=date_start,
                           date_target_end=date_end, db_target=script_name)
+
+
