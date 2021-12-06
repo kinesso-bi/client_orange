@@ -22,11 +22,14 @@ def report(date_target_start: date, date_target_end: date):
         'sfx': sfx
     }
 
-    url = 'https://hq.appsflyer.com/export/{app}/{report}/v5?api_token={token}{metrics}'.format(app=app_id,
-                                                                                                report=report_type,
-                                                                                                token=params[
-                                                                                                    'api_token'],
-                                                                                                metrics=params['sfx'])
+    url = 'https://hq.appsflyer.com/export/{app}/{report}/v5?api_token={token}&date_from={date_from}&date_to={date_to}{metrics}'.format(
+        app=app_id,
+        report=report_type,
+        token=params['api_token'],
+        date_from=date_start,
+        date_to=date_end,
+        metrics=params['sfx']
+    )
 
     def insert_row(cursor, row):
         try:
