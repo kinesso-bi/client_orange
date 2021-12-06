@@ -22,7 +22,7 @@ def report(date_target_start: date, date_target_end: date):
         'sfx': sfx
     }
 
-    url = 'https://hq.appsflyer.com/export/{app}/{report}/v5?api_token={token}&date_from={date_from}&date_to={date_to}{metrics}'.format(
+    url = 'https://hq.appsflyer.com/export/{app}/{report}/v5?api_token={token}&from={date_from}&to={date_to}{metrics}'.format(
         app=app_id,
         report=report_type,
         token=params['api_token'],
